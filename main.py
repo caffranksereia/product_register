@@ -1,4 +1,4 @@
-from src.cli import menu_registration
+from src.cli.cli import menu_registration
 
 
 def main() -> None:
