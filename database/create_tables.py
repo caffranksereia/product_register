@@ -9,7 +9,7 @@ def create_tables():
 
     try:
         with con, con.cursor() as cursor:
-            with open("database/schema.sql", "r", encoding="utf-8") as file:
+            with open("database/schema.sql", encoding="utf-8") as file:
                 sql = file.read()
 
             cursor.execute(sql)
