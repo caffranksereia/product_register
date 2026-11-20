@@ -30,7 +30,7 @@ class ProductService:
         try:
             with conn.cursor() as cursor:
                 cursor.execute("""
-            SELECT id, name, price, quatity
+            SELECT id, name, price, quantity
             from products
             ORDER BY name;
 
