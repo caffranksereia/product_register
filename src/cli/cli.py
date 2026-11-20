@@ -1,3 +1,9 @@
+from src.cli.product_cli import (
+    delete_product,
+    list_products,
+    register_product,
+    update_product,
+)
 from src.services.product_service import ProductService
 
 
@@ -11,25 +17,25 @@ def menu_registration() -> None:
         print("2 - Product List")
         print("3 - Product Update")
         print("4 - Product Delete ")
-        print("5 - Product Delete ")
+        print("5 - Sale ")
         print("0 - Exit")
 
         option = input("Choose an option: ")
 
         if option == "1":
-            product_service.product_create()
+            register_product(product_service)
 
         elif option == "2":
-            product_service.product_list()
+            list_products(product_service)
 
         elif option == "3":
-            product_service.product_update()
+            update_product(product_service)
 
         elif option == "4":
-            product_service.product_delete()
+            delete_product(product_service)
 
         elif option == "5":
-            product_service.product_sale()
+            delete_product(product_service)
 
         elif option == "0":
             print("Exiting application...")

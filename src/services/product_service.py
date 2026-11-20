@@ -1,5 +1,5 @@
 from database.get_connection import get_valid_connection
-from src.interfaces.Product_interfaces import IProduct
+from src.interfaces.Product_interfaces import IProduct, IProductUpdate
 
 
 class ProductService:
@@ -48,14 +48,52 @@ class ProductService:
         finally:
             conn.close()
 
+    def product_update(self, product: IProductUpdate) -> bool:
+        conn = get_valid_connection()
+
+        try:
+            with conn:
+                with conn.cursor() as cursor:
+                    cursor.execute(
+                        """
+                        UPDATE products
+                        SET name = %s, price = %s, quantity = %s
+                        WHERE name = %s
+                        """,
+                        (
+                            product.new_name,
+                            product.price,
+                            product.quantity,
+                            product.name,
+                        ),
+                    )
+
+                    return cursor.rowcount > 0
+
+        finally:
+            conn.close()
+
+    def product_delete(self, name: str):
+        conn = get_valid_connection()
+        try:
+            with conn:
+                with conn.cursor() as cursor:
+                    cursor.execute(
+                        """
+                        DELETE FROM products
+                        WHERE name = %s
+                        """,
+                        (name,),
+                    )
+
+                    return cursor.rowcount > 0
+
+        finally:
+            conn.close()
+
 
 # Implementar
 
-# def product_update(self, product: IProduct):
-#     conn = get_valid_connection()
-
-# def product_delete(self, product: IProduct):
-#     conn = get_valid_connection()
 
 # def product_sale(self, product: IProduct, sale: ISale):
 #     pass

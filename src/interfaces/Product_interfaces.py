@@ -9,3 +9,10 @@ class IProduct(BaseModel):
     name: str
     price: Decimal
     quantity: int
+
+
+class IProductUpdate(BaseModel):
+    name: str
+    new_name: str
+    price: Decimal
+    quantity: int
