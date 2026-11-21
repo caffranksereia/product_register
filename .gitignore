@@ -1,41 +1,35 @@
 
-# Environment variables
-.env
-.env.*
-!.env.example
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
 
 # Virtual environment
 .venv/
 venv/
 env/
 
-# Python cache
-__pycache__/
-*.py[cod]
-*$py.class
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
 
-# Testing
+# Pytest
 .pytest_cache/
 .coverage
 htmlcov/
 
-# Type checking / lint
-.mypy_cache/
+# Ruff
 .ruff_cache/
 
 # IDE
 .vscode/
 .idea/
 
-# Build
-build/
-dist/
-*.egg-info/
-
-# Logs
-*.log
-
 # OS
 .DS_Store
 Thumbs.db
-desktop.ini
+
+# Logs
+*.log
