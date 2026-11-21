@@ -1,31 +1,27 @@
 from database.conection import get_connection
 
 
-def test_database_connection():
-    print("Iniciando teste...")
-
+def main() -> None:
     con = get_connection()
 
-    print("Conexão retornada:", con)
-
-    assert con is not None
-
-    cursor = con.cursor()
+    if con is None:
+        print("Connection failed.")
+        return
 
     try:
-        cursor.execute("SELECT 1")
-        result = cursor.fetchone()
+        with con.cursor() as cursor:
+            cursor.execute("SELECT current_database();")
+            result = cursor.fetchone()
 
-        print("Resultado SQL:", result)
-
-        assert result[0] == 1
-
-        print("PostgreSQL conectado com sucesso!")
+            if result is not None:
+                print(f"Database connected: {result[0]}")
+            else:
+                print("No database returned.")
 
     finally:
-        cursor.close()
         con.close()
+        print("Connection closed.")
 
 
 if __name__ == "__main__":
-    test_database_connection()
+    main()

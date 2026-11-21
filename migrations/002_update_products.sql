@@ -1,0 +1,6 @@
+ALTER TABLE products
+ADD COLUMN brand_id UUID REFERENCES brands(id),
+ADD COLUMN weight_volume VARCHAR(50);
+
+ALTER TABLE products
+ALTER COLUMN name TYPE VARCHAR(150);

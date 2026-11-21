@@ -1,7 +1,7 @@
 from decimal import Decimal
-from uuid import uuid4
+from uuid import UUID, uuid4
 
-from src.interfaces.Product_interfaces import IProduct, IProductUpdate
+from src.interfaces.product_interface.product_interfaces import IProduct, IProductUpdate
 from src.services.product_service import ProductService
 
 
@@ -17,28 +17,21 @@ def register_product(product_service: ProductService) -> None:
     print("Product registered successfully!")
 
 
-def list_products(product_service: ProductService) -> None:
-    products = product_service.product_list()
-
-    for product in products:
-        print(f"{product.id} | {product.name} | {product.price} | {product.quantity}")
-
-
-def update_product(product_service: ProductService) -> None:
-    name = input("Enter product name: ")
-
+def update_product(
+    product_service: ProductService,
+    product_id: UUID,
+) -> None:
     new_name = input("New product name: ")
     price = Decimal(input("New product price: "))
     quantity = int(input("New product quantity: "))
 
     product = IProductUpdate(
-        name=name,
         new_name=new_name,
         price=price,
         quantity=quantity,
     )
 
-    updated = product_service.product_update(product)
+    updated = product_service.product_update(product, product_id)
 
     if updated:
         print("Product updated successfully!")
@@ -46,9 +39,13 @@ def update_product(product_service: ProductService) -> None:
         print("Product not found!")
 
 
-def delete_product(product_service: ProductService) -> None:
-    name = input("Enter product name to delete: ")
+def delete_product(
+    product_service: ProductService,
+    product_id: UUID,
+) -> None:
+    deleted = product_service.product_delete(product_id)
 
-    product_service.product_delete(name)
-
-    print("Product deleted successfully!")
+    if deleted:
+        print("Product deleted successfully!")
+    else:
+        print("Product not found!")

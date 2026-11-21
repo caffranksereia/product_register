@@ -1,7 +1,7 @@
 from decimal import Decimal
 from uuid import uuid4
 
-from src.interfaces.Product_interfaces import IProduct
+from src.interfaces.product_interface.product_interfaces import IProduct
 from src.services.product_service import ProductService
 
 

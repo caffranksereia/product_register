@@ -12,7 +12,7 @@ class IProduct(BaseModel):
 
 
 class IProductUpdate(BaseModel):
-    name: str
+    new_name: str
     new_name: str
     price: Decimal
     quantity: int

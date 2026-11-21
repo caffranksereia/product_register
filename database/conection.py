@@ -2,6 +2,7 @@ import os
 
 import psycopg2
 from dotenv import load_dotenv
+from psycopg2 import errors
 
 from .db_setup import create_database
 
@@ -18,17 +19,23 @@ def get_connection():
                 database=os.getenv("DB_NAME"),
                 user=os.getenv("DB_USER"),
                 password=os.getenv("DB_PASSWORD"),
-                port=5432,
+                port=int(os.getenv("DB_PORT", "5432")),
             )
+
             print("✅ Connected to database...")
             return con
 
-        except Exception as e:
-            print(f"❌ Attempt {attempt + 1} failed:{e}")
+        except errors.InvalidCatalogName:
             if attempt == 0:
-                print("⚠️ Trying to create database...")
+                print("⚠️ Database does not exist.")
                 create_database()
             else:
-                print("❌ Could not connect.")
+                print("❌ Database could not be created.")
+
+        except psycopg2.Error as error:
+            print(f"❌ Attempt {attempt + 1} failed: {error}")
+
+            if attempt == max_retries - 1:
+                print("❌ Could not connect to database.")
 
     return None

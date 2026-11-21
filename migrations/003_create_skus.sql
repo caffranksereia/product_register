@@ -1,0 +1,5 @@
+CREATE TABLE skus (
+    id UUID PRIMARY KEY,
+    code VARCHAR(50) NOT NULL UNIQUE,
+    product_id UUID NOT NULL UNIQUE REFERENCES products(id)
+);

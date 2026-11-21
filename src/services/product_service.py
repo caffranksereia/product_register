@@ -1,5 +1,7 @@
+from uuid import UUID
+
 from database.get_connection import get_valid_connection
-from src.interfaces.Product_interfaces import IProduct, IProductUpdate
+from src.interfaces.product_interface.product_interfaces import IProduct, IProductUpdate
 
 
 class ProductService:
@@ -48,7 +50,7 @@ class ProductService:
         finally:
             conn.close()
 
-    def product_update(self, product: IProductUpdate) -> bool:
+    def product_update(self, product: IProductUpdate, id: UUID) -> bool:
         conn = get_valid_connection()
 
         try:
@@ -58,14 +60,9 @@ class ProductService:
                         """
                         UPDATE products
                         SET name = %s, price = %s, quantity = %s
-                        WHERE name = %s
+                        WHERE id = %s
                         """,
-                        (
-                            product.new_name,
-                            product.price,
-                            product.quantity,
-                            product.name,
-                        ),
+                        (product.new_name, product.price, product.quantity, str(id)),
                     )
 
                     return cursor.rowcount > 0
@@ -73,17 +70,18 @@ class ProductService:
         finally:
             conn.close()
 
-    def product_delete(self, name: str):
+    def product_delete(self, id: UUID) -> bool:
         conn = get_valid_connection()
+
         try:
             with conn:
                 with conn.cursor() as cursor:
                     cursor.execute(
                         """
                         DELETE FROM products
-                        WHERE name = %s
+                        WHERE id = %s
                         """,
-                        (name,),
+                        (str(id),),
                     )
 
                     return cursor.rowcount > 0
