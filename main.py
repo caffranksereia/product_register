@@ -3,6 +3,7 @@ from database.db_setup import create_database
 from database.migration_runner import run_migrations
 from database.seed_runner import run_seed
 from src.cli.cli import menu_registration
+from src.setup.project_setup import setup_project
 
 
 def initialize_database() -> bool:
@@ -35,10 +36,20 @@ def initialize_database() -> bool:
 
 
 def main() -> None:
-    if not initialize_database():
-        print("Application startup canceled.")
-        return
-    menu_registration()
+    try:
+        # 1. Prepare project environment
+        setup_project()
+
+        # 2. Initialize database
+        if not initialize_database():
+            print("Application startup canceled.")
+            return
+
+        # 3. Start application
+        menu_registration()
+
+    except Exception as error:
+        print(f"❌ Application startup failed: {error}")
 
 
 if __name__ == "__main__":
