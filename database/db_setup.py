@@ -8,7 +8,7 @@ from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
 load_dotenv(".env")
 
 
-def create_database() -> None:
+def create_database() -> bool:
     db_name = os.getenv("DB_NAME")
 
     if not db_name:
@@ -38,14 +38,16 @@ def create_database() -> None:
             )
 
             if cursor.fetchone():
-                print(f"⚠️ Database '{db_name}' already exists.")
-                return
+                print(f"⏭️ Database '{db_name}' already exists. Skipping.")
+                return True
 
             cursor.execute(
                 sql.SQL("CREATE DATABASE {}").format(sql.Identifier(db_name))
             )
 
             print(f"✅ Database '{db_name}' created!")
+
+        return True
 
     except psycopg2.Error as error:
         print(f"❌ Error creating database: {error}")

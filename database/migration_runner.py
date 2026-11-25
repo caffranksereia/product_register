@@ -2,6 +2,8 @@ from pathlib import Path
 
 import psycopg2
 
+MIGRATIONS_PATH = Path(__file__).resolve().parent / "migrations"
+
 
 def ensure_schema_migrations_table(con) -> None:
     with con:
@@ -14,7 +16,7 @@ def ensure_schema_migrations_table(con) -> None:
                 );
                 """)
 
-    print("✅ schema_migrations table ready.")
+    print("✅ Migration control table ready.")
 
 
 def get_applied_migrations(con) -> set[str]:
@@ -39,9 +41,6 @@ def run_migrations(con) -> None:
     migration_files = sorted(migrations_path.glob("*.sql"))
 
     for file in migration_files:
-        if file.name == "000_create_schema_migrations.sql":
-            continue
-
         if file.name in applied:
             print(f"⏭️ Skipping migration: {file.name}")
             continue
@@ -66,7 +65,7 @@ def run_migrations(con) -> None:
             print(f"✅ Applied: {file.name}")
 
         except psycopg2.Error as error:
-            print(f"❌ Error running {file.name}: {error}")
+            print(f"❌ Migration failed: {file.name}: {error}")
             raise
 
-    print("🔥 All pending migrations processed.")
+    print("✅ All migrations processed.")
